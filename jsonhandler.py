@@ -5,6 +5,6 @@ def LoadJson(path):
     return data
 
 def DumpJson(path, data):
-    data = json.dump(data)
-    f = open(path)
+    data = json.dumps(data)
+    f = open(path, mode="w")
     f.write(data)

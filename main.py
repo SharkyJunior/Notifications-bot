@@ -1,14 +1,11 @@
-#import sys
-#sys.path.append('/Users/sharkyjunior/Documents/constants')
-
 from telebot import *
 from telebot import types
-from ..constants import Notifications_bot
+import constants
 from jsonhandler import *
 
-DATABASE_PATH = Notifications_bot.DATABASE_PATH
+DATABASE_PATH = constants.Notifications_bot.DATABASE_PATH
 
-bot = TeleBot(Notifications_bot.API_KEY)
+bot = TeleBot(constants.Notifications_bot.API_KEY)
 
 print("Starting bot...")
 

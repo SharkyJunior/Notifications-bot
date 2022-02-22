@@ -22,6 +22,7 @@ def start(update: Update, context: CallbackContext):
         )
     )
 
+#TODO: make a conversation handler to make new tasks
 def start_task_creation(update: Update, context: CallbackContext):
     pass
 
@@ -46,7 +47,7 @@ def main():
 
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("taskslist", todo_list))
-    dispatcher.add_handler(MessageHandler(Filters.regex("^(Create first task|Info"), ))
+    dispatcher.add_handler(MessageHandler(Filters.regex("^(Create first task|Info)$"), ))
     
     updater.start_polling()
 

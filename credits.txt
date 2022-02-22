@@ -1,0 +1,13 @@
+Thank you for using my bot, I really appreciate it.
+This is a completely free open-source project, so be free to copy and/or modify source files.
+
+Developers:
+    - SharkyJunior (code, programming, UI, UX)
+        My socials:
+            - Youtube: https://www.youtube.com/channel/UCI13wehCNEA9huT6fn76OEw
+            - Twitter: @JuniorSharky
+            - Reddit: https://www.reddit.com/user/SharkyJunior
+            - GitHub: https://github.com/SharkyJunior
+    - Kot_Shahter (really nothing yet, but prbly smth later)
+
+Source code: https://github.com/SharkyJunior/Notifications-bot (please star our project and share it with your friends)

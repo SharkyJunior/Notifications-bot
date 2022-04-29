@@ -1,5 +1,6 @@
 from datetime import datetime
-import re # oh no
+import re #oh no
+from types import new_class
 from telegram import *
 from telegram.ext import *
 import constants # you should create constants.py file in bot directory and input api key and database path as variables there
@@ -10,7 +11,8 @@ TIME_REGEX = re.compile("[0-2]\d[.: ][0-5]\d[, ] ?[0-3]\d[/.][01]\d[/.]\d\d\d\d"
 TITLE, DESCRIPTION, DUETIME = range(3) # Conversation handler states
 #---------Default keyboard----------
 reply_keyboard = [['Create new task', 'My info'], ['View all tasks',  'View most urgent task'], ['Delete task', 'Credits']]
-MAINMENU_KEYBOARD = ReplyKeyboardMarkup(
+MAINMENU_KEYBOARD = ReplyKeyboardim
+Markup(
             reply_keyboard, one_time_keyboard=False, input_field_placeholder='Press a button or write here to start using bot'
         )
 #------End of default keyboard------
@@ -20,7 +22,7 @@ is_creating = False
 def start(update: Update, context: CallbackContext):
     if(not str(update.message.from_user.id) in LoadJson(DATABASE_PATH).keys()): #checking if user id already in database
         data = LoadJson(DATABASE_PATH) # if not, will create list for this id
-        data[update.message.from_user.id] = []
+        data[str(update.message.from_user.id)] = []
         DumpJson(DATABASE_PATH, data)
     
     update.message.reply_text(
@@ -37,6 +39,7 @@ def start_task_creation(update: Update, context: CallbackContext):
 
 def got_title(update: Update, context: CallbackContext):
     if is_creating:
+        global new_task
         new_task = {"title" : update.message.text}
         update.message.reply_text(f"Fine, now provide some description for {update.message.text.lower()} (if you're lazy, just type 'no')...")
         return DESCRIPTION
@@ -47,21 +50,27 @@ def got_description(update: Update, context: CallbackContext):
     if is_creating:
         reply = update.message.text
         if not reply == 'no':
+            global new_task
             new_task["description"] = update.message.text
-            update.message.reply_text("Great! Now, finally, what is the deadline for your task (MM:HH DD:MM:YYYY)?")
+            update.message.reply_text("Great! Now, finally, what is the deadline for your task (HH:MM DD/MM/YYYY)?")
         else:
             new_task["description"] = "No description provided."
-            update.message.reply_text("Not surprising. Now, finally, what is the deadline for your task (MM:HH DD:MM:YYYY)?")
+            update.message.reply_text("Not surprising. Now, finally, what is the deadline for your task (HH:MM DD/MM/YYYY)?")
         return DUETIME
 
-#time regex: [0-2]\d[.: ][0-5]\d[, ] ?[0-3]\d[/.][01]\d[/.]\d\d\d\d (12:34 12/12/2020 - matches)
+#time regex: [0-2]\d[.: ][0-5]\d[, ] ?[0-3]\d[/.][01]\d[/.]\d\d\d\d (12:34 12/12/2022 - matches)
 def got_duetime(update: Update, context: CallbackContext):
     if is_creating:
         reply = update.message.text
         if TIME_REGEX.match(reply):
-            print("regex matched")
+            global new_task
+            new_task["duetime"] = reply
+                        
+            data = LoadJson(DATABASE_PATH)
+            data[str(update.message.from_user.id)].append(new_task)
+            DumpJson(DATABASE_PATH, data)
             update.message.reply_text("Done!", reply_markup=MAINMENU_KEYBOARD)
-            return ConversationHandler.END
+            return ConversationHandler.END            
         else:
             update.message.reply_text("Oops! I cannot understand this type of time, please try again.")
             return DUETIME
@@ -81,7 +90,7 @@ def todo_list(update: Update, context: CallbackContext):
     else:
         print("cringe")
 
-#-----ConverstionHandler fallback-----
+#-----ConversationHandler fallback-----
 def cancel_creation(update: Update, context: CallbackContext):
     global is_creating
     is_creating = False

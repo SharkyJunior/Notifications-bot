@@ -152,5 +152,7 @@ cython_debug/
 #.idea/
 constants.py
 Constants.py
+jsonhandler.py
+Jsonhandler.py
 credits.txt
 Credits.txt

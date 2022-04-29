@@ -1,6 +1,7 @@
 Thank you for using my bot, I really appreciate it.
 This is a completely free open-source project, so be free to copy and/or modify source files.
 
+
 Developers:
     - SharkyJunior (code, programming, UI, UX)
         My socials:
